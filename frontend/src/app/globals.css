@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --text: #1b0414;
+    --background: #ffffff;
+    --primary: #e86882;
+    --secondary: #f4cab8;
+    --accent: #cb1036;
+    --black: #2b2228;
+  }
+}
+
+body {
+    background: var(--text);
+}
+
+button {
+    padding: 10px;
+    border-radius: 1.5rem;
+    margin: 5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.div-component {
+    padding: 10px 30px;
+    margin: 1px 40px;
+    border-radius: 1.5rem;
+    border: 1px solid var(--black);
+}
+
+.button-pink {
+    background: var(--secondary);
+    color: var(--accent);
+}
+
+.button-pink:hover {
+    background: var(--primary);
+    color: var(--background);
+    box-shadow: 0 3px 3px 1px var(--secondary);
+}
+
+.button-black {
+    color: var(--primary);
+}
+
+.button-black:hover {
+    background: var(--black);
+    color: var(--secondary);
+}
+
+body::-webkit-scrollbar {
+  width: 3px;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+}
