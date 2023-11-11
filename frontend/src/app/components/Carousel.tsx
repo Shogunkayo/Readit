@@ -29,8 +29,8 @@ const Carousel = () => {
             ></Image>
             <div className="flex justify-between">
                 <div>
-                    <button className="hover:text-secondary hover:bg-text rounded-full py-3 px-5" onClick={() => {handleClick(-1)}}>&lt;</button>
-                    <button className="hover:text-secondary hover:bg-text rounded-full py-3 px-5" onClick={() => {handleClick(1)}}>&gt;</button>
+                    <button className="button-black rounded-full py-3 px-5" onClick={() => {handleClick(-1)}}>&lt;</button>
+                    <button className="button-black rounded-full py-3 px-5" onClick={() => {handleClick(1)}}>&gt;</button>
                 </div>
                 <div className="-translate-x-5 translate-y-3.5">
                     {currentIndex + 1}/{slides.length}
