@@ -2,7 +2,7 @@ import React from 'react'
 
 type Props = {}
 
-const Search = (props: Props) => {
+const SearchBar = (props: Props) => {
     return (
         <div>
             <div className="relative w-1/2 m-auto my-10">
@@ -13,4 +13,4 @@ const Search = (props: Props) => {
     )
 }
 
-export default Search
+export default SearchBar

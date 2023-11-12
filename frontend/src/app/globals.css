@@ -16,6 +16,7 @@
 
 body {
     background: var(--text);
+    overflow-x: hidden;
 }
 
 button {
@@ -57,6 +58,15 @@ button {
     box-shadow: 0 3px 3px 1px var(--secondary);
 }
 
+.button-gradient {
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
+    color: var(--background);
+}
+
+.button-gradient:hover {
+    background: var(--primary);
+}
+
 .button-circle {
     color: var(--secondary);
     background-color: var(--text);
@@ -75,4 +85,14 @@ body::-webkit-scrollbar {
  
 body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
+}
+
+@keyframes rotate {
+    50% {
+        scale: 1 1.5;
+    }
+}
+
+#blob {
+    animation: rotate 20s infinite;
 }
