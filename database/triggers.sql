@@ -1,3 +1,5 @@
+USE readit;
+
 -- Trigger to update h_index when an author publishes a paper or receives a citation
 DELIMITER //
 
