@@ -26,9 +26,10 @@ CREATE TABLE Researcher
     no_citations INT NOT NULL DEFAULT 0,
     date_created DATETIME NOT NULL,
     page_visits INT NOT NULL DEFAULT 0,
-    nationality VARCHAR(20) NOT NULL,
+    nationality INT NOT NULL,
     PRIMARY KEY (r_id),
-    UNIQUE (email)
+    UNIQUE (email),
+    FOREIGN KEY (nationality) REFERENCES Country(country_id)
 );
 
 CREATE TABLE Paper
@@ -222,6 +223,7 @@ CREATE TABLE Publish_Conf
     date_published DATETIME NOT NULL,
     doi UUID NOT NULL,
     c_id UUID NOT NULL,
+    domain VARCHAR(20) NOT NULL,
     PRIMARY KEY (doi),
     FOREIGN KEY (doi) REFERENCES Paper(doi),
     FOREIGN KEY (c_id) REFERENCES Conference(c_id)

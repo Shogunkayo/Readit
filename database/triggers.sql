@@ -1,30 +1,38 @@
 USE readit;
 
--- Trigger to update h_index when an author publishes a paper or receives a citation
+/* Trigger to update h_index when an author publishes a paper or receives a citation */
+
+/* Trigger to enforce graduation rate constraints */
 DELIMITER //
 
-CREATE TRIGGER UpdateHIndex
-AFTER INSERT ON Paper_keywords
+CREATE TRIGGER Before_Insert_University
+BEFORE INSERT ON University
 FOR EACH ROW
 BEGIN
-    DECLARE researcher_id VARCHAR(15);
-    DECLARE new_h_index INT;
-
-    -- Get the researcher ID associated with the paper
-    SELECT r_id INTO researcher_id
-    FROM Write1
-    WHERE doi = NEW.doi;
-
-    -- Calculate the new h_index
-    SELECT COUNT(DISTINCT doi) + COUNT(DISTINCT c_id) INTO new_h_index
-    FROM Paper
-    JOIN Publish ON Paper.doi = Publish.doi
-    WHERE Write1.r_id = researcher_id OR Publish.doi = NEW.doi;
-
-    -- Update the h_index in Researcher_details
-    UPDATE Researcher_details
-    SET h_index = new_h_index
-    WHERE r_id = researcher_id;
+    IF NEW.graduation_rate < 0 OR NEW.graduation_rate > 100 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid graduation rate. Must be between 0 and 100.';
+    END IF;
 END //
 
 DELIMITER ;
+
+/* Trigger to check the paper domain before inserting into publish_conf */
+DELIMITER //
+
+CREATE TRIGGER Before_Insert_Publish_Conf
+BEFORE INSERT ON Publish_Conf
+FOR EACH ROW
+BEGIN
+    IF NEW.domain NOT IN (
+        SELECT domain
+        FROM Conference_domains
+        WHERE c_id = NEW.c_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid paper domain for the specified conference.';
+    END IF;
+END //
+
+DELIMITER ;
+
