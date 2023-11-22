@@ -65,10 +65,10 @@ const Topbar = (props: Props) => {
                 </div>
             </div>
             <div className="absolute w-1/2 right-[29.5rem] z-30">
-                {searchOpen && (
+                {currentUrl !== '/login' && currentUrl !== '/signup' && searchOpen && (
                     <SearchBar></SearchBar>
                 )}
-                {!searchOpen && (
+                {currentUrl !== '/login' && currentUrl !== '/signup' && !searchOpen && (
                     <div className="translate-x-[27.5rem] w-fit">
                        <button className="button-pink" onClick={() => setSearchOpen(true)}><AiOutlineSearch></AiOutlineSearch></button> 
                     </div>
