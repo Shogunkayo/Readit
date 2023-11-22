@@ -17,11 +17,11 @@ CREATE TABLE City (
 
 CREATE TABLE Researcher
 (
-    r_id UUID NOT NULL,
-    last_name VARCHAR(20) NOT NULL,
-    first_name VARCHAR(20) NOT NULL,
+    r_id VARCHAR(100) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
     password BINARY(60) NOT NULL,
-    email VARCHAR(20) NOT NULL,
+    email VARCHAR(50) NOT NULL,
     h_index INT NOT NULL DEFAULT 0,
     no_citations INT NOT NULL DEFAULT 0,
     date_created DATETIME NOT NULL,
@@ -35,39 +35,38 @@ CREATE TABLE Researcher
 
 CREATE TABLE Paper
 (
-    doi UUID NOT NULL,
-    domain VARCHAR(20) NOT NULL,
-    blob_paper LONGBLOB NOT NULL,
-    blob_abstract MEDIUMBLOB NOT NULL,
-    title VARCHAR(20) NOT NULL,
+    doi VARCHAR(100) NOT NULL,
+    domain VARCHAR(50) NOT NULL,
+    paper_url VARCHAR(100) NOT NULL,
+    title VARCHAR(50) NOT NULL,
     no_reads INT NOT NULL DEFAULT 0,
     PRIMARY KEY (doi)
 );
 
 CREATE TABLE Organization
 (
-    o_id UUID NOT NULL,
-    o_name VARCHAR(20) NOT NULL,
-    location VARCHAR(20) NOT NULL,
+    o_id VARCHAR(100) NOT NULL,
+    o_name VARCHAR(50) NOT NULL,
+    location VARCHAR(50) NOT NULL,
     PRIMARY KEY (o_id)
 );
 
-CREATE TABLE Private_Repository
+CREATE TABLE Priv_Repository
 (
-    repo_id UUID NOT NULL,
-    repo_name VARCHAR(20) NOT NULL,
-    admin_id UUID NOT NULL,
+    repo_id VARCHAR(100) NOT NULL,
+    repo_name VARCHAR(50) NOT NULL,
+    admin_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (repo_id),
     FOREIGN KEY (admin_id) REFERENCES Researcher(r_id)
 );
 
 CREATE TABLE University
 (
-    u_id UUID NOT NULL,
-    u_name VARCHAR(20) NOT NULL,
+    u_id VARCHAR(100) NOT NULL,
+    u_name VARCHAR(50) NOT NULL,
     city_id INT NOT NULL,
     country_id INT NOT NULL,
-    accredition VARCHAR(20) NOT NULL,
+    accredition VARCHAR(50) NOT NULL,
     graduation_rate INT NOT NULL,
     PRIMARY KEY (u_id),
     FOREIGN KEY (city_id) REFERENCES City(city_id),
@@ -76,8 +75,8 @@ CREATE TABLE University
 
 CREATE TABLE Company
 (
-    c_id UUID NOT NULL,
-    c_name VARCHAR(20) NOT NULL,
+    c_id VARCHAR(100) NOT NULL,
+    c_name VARCHAR(50) NOT NULL,
     comp_type ENUM('NGO', 'For Profit', 'Other') NOT NULL,
     industry_sector INT NOT NULL,
     head_city_id INT NOT NULL,
@@ -88,12 +87,12 @@ CREATE TABLE Company
 
 CREATE TABLE Department
 (
-    d_id UUID NOT NULL,
-    d_name VARCHAR(20) NOT NULL,
-    d_head UUID NOT NULL,
+    d_id VARCHAR(100) NOT NULL,
+    d_name VARCHAR(50) NOT NULL,
+    d_head VARCHAR(100) NOT NULL,
     budget INT NOT NULL DEFAULT 0,
     no_students INT NOT NULL DEFAULT 0,
-    u_id UUID NOT NULL,
+    u_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (d_id),
     FOREIGN KEY (u_id) REFERENCES University(u_id),
     FOREIGN KEY (d_head) REFERENCES Researcher(r_id)
@@ -101,24 +100,24 @@ CREATE TABLE Department
 
 CREATE TABLE Paper_keywords
 (
-    keyword VARCHAR(20) NOT NULL,
-    doi UUID NOT NULL,
+    keyword VARCHAR(50) NOT NULL,
+    doi VARCHAR(100) NOT NULL,
     PRIMARY KEY (keyword, doi),
     FOREIGN KEY (doi) REFERENCES Paper(doi)
 );
 
 CREATE TABLE University_degrees
 (
-    degree VARCHAR(20) NOT NULL,
-    u_id UUID NOT NULL,
+    degree VARCHAR(50) NOT NULL,
+    u_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (degree, u_id),
     FOREIGN KEY (u_id) REFERENCES University(u_id)
 );
 
 CREATE TABLE WritePaper
 (
-    r_id UUID NOT NULL,
-    doi UUID NOT NULL,
+    r_id VARCHAR(100) NOT NULL,
+    doi VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id, doi),
     FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
     FOREIGN KEY (doi) REFERENCES Paper(doi)
@@ -126,8 +125,8 @@ CREATE TABLE WritePaper
 
 CREATE TABLE Follows
 (
-    follows UUID NOT NULL,
-    follower UUID NOT NULL,
+    follows VARCHAR(100) NOT NULL,
+    follower VARCHAR(100) NOT NULL,
     PRIMARY KEY (follows, follower),
     FOREIGN KEY (follows) REFERENCES Researcher(r_id),
     FOREIGN KEY (follower) REFERENCES Researcher(r_id)
@@ -135,8 +134,8 @@ CREATE TABLE Follows
 
 CREATE TABLE Belong_To
 (
-    r_id UUID NOT NULL,
-    o_id UUID NOT NULL,
+    r_id VARCHAR(100) NOT NULL,
+    o_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id),
     FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
     FOREIGN KEY (o_id) REFERENCES Organization(o_id)
@@ -144,8 +143,8 @@ CREATE TABLE Belong_To
 
 CREATE TABLE Citations
 (
-    paper_citing UUID NOT NULL,
-    paper_cited UUID NOT NULL,
+    paper_citing VARCHAR(100) NOT NULL,
+    paper_cited VARCHAR(100) NOT NULL,
     PRIMARY KEY (paper_citing, paper_cited),
     FOREIGN KEY (paper_citing) REFERENCES Paper(doi),
     FOREIGN KEY (paper_cited) REFERENCES Paper(doi)
@@ -153,35 +152,35 @@ CREATE TABLE Citations
 
 CREATE TABLE Publish_Repo
 (
-    doi UUID NOT NULL,
-    repo_id UUID NOT NULL,
+    doi VARCHAR(100) NOT NULL,
+    repo_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (doi),
     FOREIGN KEY (doi) REFERENCES Paper(doi),
-    FOREIGN KEY (repo_id) REFERENCES Private_Repository(repo_id)
+    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id)
 );
 
 CREATE TABLE Company_Repo
 (
-    c_id UUID NOT NULL,
-    repo_id UUID NOT NULL,
+    c_id VARCHAR(100) NOT NULL,
+    repo_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (repo_id),
     FOREIGN KEY (c_id) REFERENCES Company(c_id),
-    FOREIGN KEY (repo_id) REFERENCES Private_Repository(repo_id)
+    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id)
 );
 
 CREATE TABLE University_Repo
 (
-    repo_id UUID NOT NULL,
-    u_id UUID NOT NULL,
+    repo_id VARCHAR(100) NOT NULL,
+    u_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (repo_id),
-    FOREIGN KEY (repo_id) REFERENCES Private_Repository(repo_id),
+    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id),
     FOREIGN KEY (u_id) REFERENCES University(u_id)
 );
 
 CREATE TABLE Work_Company
 (
-    r_id UUID NOT NULL,
-    c_id UUID NOT NULL,
+    r_id VARCHAR(100) NOT NULL,
+    c_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id),
     FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
     FOREIGN KEY (c_id) REFERENCES Company(c_id)
@@ -189,8 +188,8 @@ CREATE TABLE Work_Company
 
 CREATE TABLE Work_University
 (
-    r_id UUID NOT NULL,
-    d_id UUID NOT NULL,
+    r_id VARCHAR(100) NOT NULL,
+    d_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id),
     FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
     FOREIGN KEY (d_id) REFERENCES Department(d_id)
@@ -198,13 +197,13 @@ CREATE TABLE Work_University
 
 CREATE TABLE Conference
 (
-    c_id UUID NOT NULL,
+    c_id VARCHAR(100) NOT NULL,
     tier ENUM('Tier 1', 'Tier 2', 'Tier 3', 'Other') NOT NULL,
-    c_name VARCHAR(20) NOT NULL,
+    c_name VARCHAR(50) NOT NULL,
     date_conduct DATE NOT NULL,
     venue_city_id INT NOT NULL,
     venue_country_id INT NOT NULL,
-    o_id UUID NOT NULL,
+    o_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (c_id),
     FOREIGN KEY (o_id) REFERENCES Organization(o_id),
     FOREIGN KEY (venue_city_id) REFERENCES City(city_id),
@@ -213,8 +212,8 @@ CREATE TABLE Conference
 
 CREATE TABLE Conference_domains
 (
-    domain VARCHAR(20) NOT NULL,
-    c_id UUID NOT NULL,
+    domain VARCHAR(50) NOT NULL,
+    c_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (domain, c_id),
     FOREIGN KEY (c_id) REFERENCES Conference(c_id)
 );
@@ -222,9 +221,9 @@ CREATE TABLE Conference_domains
 CREATE TABLE Publish_Conf
 (
     date_published DATETIME NOT NULL,
-    doi UUID NOT NULL,
-    c_id UUID NOT NULL,
-    domain VARCHAR(20) NOT NULL,
+    doi VARCHAR(100) NOT NULL,
+    c_id VARCHAR(100) NOT NULL,
+    domain VARCHAR(50) NOT NULL,
     PRIMARY KEY (doi),
     FOREIGN KEY (doi) REFERENCES Paper(doi),
     FOREIGN KEY (c_id) REFERENCES Conference(c_id)
