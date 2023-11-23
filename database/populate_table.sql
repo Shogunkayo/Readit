@@ -26,16 +26,16 @@ INSERT INTO City (city_id, city_name, country_id) VALUES
 
 -- passwords is password1 for all
 INSERT INTO Researcher (r_id, last_name, first_name, password, email, h_index, no_citations, date_created, page_visits, nationality, dob) VALUES
-('1a7c813f-13b2-4f4d-bb79-6d8dc23f28a1', 'Smith', 'John', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'john.smith@email.com', 10, 100, '2023-11-23 12:00:00', 50, 1, '2023-11-04'),
-('2b8d924a-725e-49ec-aa79-1b6e44e17e34', 'Johnson', 'Emily', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'emily.johnson@email.com', 8, 80, '2023-11-23 12:05:00', 40, 2, '2023-11-04'),
-('3c9eab53-62bf-46b5-b86b-3d93321c1e7e', 'Williams', 'David', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'david.williams@email.com', 12, 120, '2023-11-23 12:10:00', 60, 3, '2023-11-04'),
-('4d6f2739-3e2e-4b5c-bb3a-5bf9402e2bc4', 'Müller', 'Anna', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'anna.muller@email.com', 9, 90, '2023-11-23 12:15:00', 45, 4, '2023-11-04'),
-('5e2aeb18-59b7-4f7c-b169-8d96f470c5a2', 'Dubois', 'Lucas', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'lucas.dubois@email.com', 11, 110, '2023-11-23 12:20:00', 55, 5, '2023-11-04'),
-('6f1b6987-4f8a-4965-9e9a-4e45a2d7b12d', 'Smith', 'Olivia', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'olivia.smith@email.com', 7, 70, '2023-11-23 12:25:00', 35, 6, '2023-11-04'),
-('7g0c83b2-1d2e-4a74-9b4b-3286894c70a3', 'Sato', 'Kenji', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'kenji.sato@email.com', 14, 140, '2023-11-23 12:30:00', 70, 7, '2023-11-04'),
-('8h8e20f3-93c1-462e-9aef-2b1ed80ff9e8', 'Silva', 'Maria', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'maria.silva@email.com', 13, 130, '2023-11-23 12:35:00', 65, 8, '2023-11-04'),
-('9i4d20b8-2a94-429e-9a4a-5769667e1701', 'Reddy', 'Raj', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'raj.reddy@email.com', 6, 60, '2023-11-23 12:40:00', 30, 9, '2023-11-04'),
-('10j6c7c1-0e92-4cb7-a184-9fbd9f1d19ea', 'Zulu', 'Thabo', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'thabo.zulu@email.com', 5, 50, '2023-11-23 12:45:00', 25, 10, '2023-11-04');
+('1a7c813f-13b2-4f4d-bb79-6d8dc23f28a1', 'Smith', 'John', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'john.smith@email.com', 10, '2023-11-23 12:00:00', 50, 1, '2023-11-04'),
+('2b8d924a-725e-49ec-aa79-1b6e44e17e34', 'Johnson', 'Emily', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'emily.johnson@email.com', 8,'2023-11-23 12:05:00', 40, 2, '2023-11-04'),
+('3c9eab53-62bf-46b5-b86b-3d93321c1e7e', 'Williams', 'David', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'david.williams@email.com', 12, '2023-11-23 12:10:00', 60, 3, '2023-11-04'),
+('4d6f2739-3e2e-4b5c-bb3a-5bf9402e2bc4', 'Müller', 'Anna', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'anna.muller@email.com', 9, '2023-11-23 12:15:00', 45, 4, '2023-11-04'),
+('5e2aeb18-59b7-4f7c-b169-8d96f470c5a2', 'Dubois', 'Lucas', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'lucas.dubois@email.com', 11, '2023-11-23 12:20:00', 55, 5, '2023-11-04'),
+('6f1b6987-4f8a-4965-9e9a-4e45a2d7b12d', 'Smith', 'Olivia', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'olivia.smith@email.com', 7, '2023-11-23 12:25:00', 35, 6, '2023-11-04'),
+('7g0c83b2-1d2e-4a74-9b4b-3286894c70a3', 'Sato', 'Kenji', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'kenji.sato@email.com', 14, '2023-11-23 12:30:00', 70, 7, '2023-11-04'),
+('8h8e20f3-93c1-462e-9aef-2b1ed80ff9e8', 'Silva', 'Maria', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'maria.silva@email.com', 13, '2023-11-23 12:35:00', 65, 8, '2023-11-04'),
+('9i4d20b8-2a94-429e-9a4a-5769667e1701', 'Reddy', 'Raj', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'raj.reddy@email.com', 6, '2023-11-23 12:40:00', 30, 9, '2023-11-04'),
+('10j6c7c1-0e92-4cb7-a184-9fbd9f1d19ea', 'Zulu', 'Thabo', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'thabo.zulu@email.com', 5, '2023-11-23 12:45:00', 25, 10, '2023-11-04');
 
 INSERT INTO Paper (doi, domain, paper_url, title, no_reads) VALUES
 ('1a7c813f-13b2-4f4d-bb79-6d8dc23f28a1', 'Computer Science', '~/sample_files/papers/p1.txt', 'Advanced Algorithms', 50),

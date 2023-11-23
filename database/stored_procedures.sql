@@ -9,7 +9,6 @@ BEGIN
         r.first_name,
         r.email,
         r.h_index,
-        r.no_citations,
         r.dob,
         r.page_visits,
         c.country_name AS nationality
@@ -133,6 +132,51 @@ BEGIN
     JOIN Conference conf ON pc.c_id = conf.c_id
     JOIN WritePaper wp ON wp.doi = p.doi
     WHERE wp.r_id = p_r_id;
+END //
+
+DELIMITER ;
+
+/* Get search results */
+DROP PROCEDURE GetSearchPapers;
+DELIMITER //
+
+CREATE PROCEDURE GetSearchPapers(
+    IN p_search_key VARCHAR(100)
+)
+BEGIN
+    SELECT DISTINCT
+        p.doi as doi,
+        p.domain as domain,
+        p.title as title,
+        p.paper_url as paper_url,
+        r.r_id as r_id,
+        r.first_name as first_name,
+        r.last_name as last_name
+    FROM Paper p
+    JOIN Citations ci ON ci.paper_cited = p.doi
+    JOIN WritePaper wp ON wp.doi = p.doi
+    JOIN Researcher r ON wp.r_id = r.r_id
+    WHERE p.title LIKE CONCAT('%', p_search_key, '%') 
+    OR r.first_name LIKE CONCAT('%', p_search_key, '%')
+    OR r.last_name LIKE CONCAT('%', p_search_key, '%');
+END //
+
+DELIMITER ;
+
+DROP PROCEDURE GetSearchUsers;
+DELIMITER //
+
+CREATE PROCEDURE GetSearchUsers(
+    IN p_search_key VARCHAR(100)
+)
+BEGIN
+    SELECT DISTINCT
+        r.r_id as r_id,
+        r.first_name as first_name,
+        r.last_name as last_name
+    FROM Researcher r
+    WHERE r.first_name LIKE CONCAT('%', p_search_key, '%')
+    OR r.last_name LIKE CONCAT('%', p_search_key, '%');
 END //
 
 DELIMITER ;

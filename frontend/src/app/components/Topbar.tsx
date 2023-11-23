@@ -2,11 +2,12 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import {AiOutlineArrowUp, AiOutlineSearch} from "react-icons/ai"
+import { AiOutlineSearch} from "react-icons/ai"
 import { usePathname, useRouter } from "next/navigation"
 import SearchBar from "./SearchBar"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../redux/store"
+import { logout } from "../redux/features/authSlice"
 
 type Props = {}
 
@@ -14,6 +15,7 @@ const Topbar = (props: Props) => {
     const auth = useSelector((state: RootState) => state.auth)
     const currentUrl = usePathname()
     const router = useRouter()
+    const dispatch = useDispatch()
 
     const [opacity, setOpacity] = useState(1)
     const [searchOpen, setSearchOpen] = useState(false)
@@ -83,7 +85,8 @@ const Topbar = (props: Props) => {
                 )}
                 {auth.user && (
                     <>
-                        <button></button>
+                        <button className="button-black" onClick={() => {router.push(`/profile/${auth.user?.id}`)}}>Profile</button>
+                        <button className="button-black" onClick={() => {router.push("/"); dispatch(logout())}}>Logout</button>
                     </>
                 )}
             </div>

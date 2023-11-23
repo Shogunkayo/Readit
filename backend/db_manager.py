@@ -166,3 +166,27 @@ class DatabaseManager:
                 "org_id": res[0][0],
                 "org_name": res[0][1]
             }
+
+    def getSearchPaper(self, search_key):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetSearchPapers", [search_key])
+        res = cur.fetchall()
+        cur.close()
+        if res == ():
+            return None
+        else:
+            return res
+
+    def getSearchUser(self, search_key):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetSearchUsers", [search_key])
+        res = cur.fetchall()
+        cur.close()
+        if res == ():
+            return None
+        else:
+            return res

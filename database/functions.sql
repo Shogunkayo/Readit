@@ -79,7 +79,8 @@ DELIMITER ;
 /* Calculate average h-index for a university */
 DELIMITER //
 
-CREATE FUNCTION CalculateAverageHIndex(university_id VARCHAR(100)) RETURNS FLOAT
+CREATE FUNCTION CalculateAverageHIndex(university_id VARCHAR(100))
+RETURNS FLOAT
 READS SQL DATA
 DETERMINISTIC
 BEGIN

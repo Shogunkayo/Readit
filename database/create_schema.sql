@@ -23,7 +23,6 @@ CREATE TABLE Researcher
     password BINARY(60) NOT NULL,
     email VARCHAR(50) NOT NULL,
     h_index INT NOT NULL DEFAULT 0,
-    no_citations INT NOT NULL DEFAULT 0,
     date_created DATETIME NOT NULL,
     dob DATE NOT NULL,
     page_visits INT NOT NULL DEFAULT 0,

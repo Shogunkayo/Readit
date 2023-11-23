@@ -1,5 +1,7 @@
 'use client'
 
+// export const user = typeof window !== "undefined" ? window.localStorage.getItem('user') : null
+
 import { createSlice } from "@reduxjs/toolkit"
 
 export interface AuthState {
@@ -13,7 +15,7 @@ export interface User {
 }
 
 const initialState: AuthState = {
-    user: null
+    user: null // user ? JSON.parse(user) : null
 }
 
 export const authSlice = createSlice({
@@ -21,7 +23,10 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {state.user = action.payload},
-        logout: (state, action) => {state.user = null}
+        logout: (state) => {
+            state.user = null
+            localStorage.removeItem('user')
+        }
     }
 })
 

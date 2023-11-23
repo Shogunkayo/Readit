@@ -143,5 +143,42 @@ def getSocial():
         print("ERROR: ", e)
         return jsonify({'error': 'Invalid request'}), 400
 
+@app.route('/search')
+def getSearch():
+    try:
+        search_key = request.args.get('s')
+        query_paper = database_manager.getSearchPaper(search_key)
+        query_user = database_manager.getSearchUser(search_key)
+
+        res = {}
+
+        if query_paper is None:
+            res["papers"] = None
+
+        else:
+            res["papers"] = [{
+                "doi": q[0],
+                "domain": q[1],
+                "title": q[2],
+                "paper_url": q[3],
+                "r_id": q[4],
+                "first_name": q[5],
+                "last_name": q[6]
+            } for q in query_paper]
+
+        if query_user is None:
+            res["users"] = None
+        else:
+            res["users"] = [{
+                "r_id": q[0],
+                "first_name": q[1],
+                "last_name": q[2]
+            } for q in query_user]
+
+        return jsonify(res), 200
+
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
 if __name__ == '__main__':
     app.run(debug=True)
