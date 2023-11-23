@@ -86,6 +86,26 @@ const Profile = ({params}: {params: {id: string}}) => {
         return citations
     }
 
+    const handleFollow = () => {
+        console.log(user?.id)
+        return
+        if (user && user.id !== params.id){
+            axios.post("http://localhost:5000/profile/follow",
+                JSON.stringify({
+                    "follower": user.id,
+                    "following": params.id,
+                    "token": user.token
+                    }),
+                {headers: {
+                    "Content-Type": "application/json"
+                }}
+            )
+            .then(response => {
+                console.log(response.data)
+            })
+        }
+    }
+
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const getMonthYear = (date: Date) => {
@@ -103,7 +123,6 @@ const Profile = ({params}: {params: {id: string}}) => {
                     .then(async response => {
                         if(!response.data)
                             console.log("error getting papers")
-                        console.log(response.data)
                         setUserPapers(response.data)
                         
                         axios.get(`http://localhost:5000/social?r_id=${params.id}`)
@@ -121,6 +140,8 @@ const Profile = ({params}: {params: {id: string}}) => {
                             })
                     })
             })
+        console.log(params.id)
+        console.log(user?.id)
     }, [params.id])
 
     return (
@@ -145,7 +166,7 @@ const Profile = ({params}: {params: {id: string}}) => {
                     </div>
                 )}
                 {user && params.id === user.id && (<button>Change Details</button>)}
-                {user && params.id !== user.id && (<button>Follow</button>)}
+                {user && params.id !== user.id && (<button onClick={handleFollow}>Follow</button>)}
             </div>
             <div>
                 <nav className="div-component bg-primary">

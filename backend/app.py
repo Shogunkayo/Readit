@@ -62,6 +62,20 @@ def verifyAuth():
     return jsonify({'message': 'JWT Token is present. Visited Protected Route'})
 
 # -- Profile routes
+@app.route('/profile/follow', methods=['POST'])
+@session_manager.validateJWT
+def follow():
+    try:
+        request_body = request.get_json()
+        follower = request_body["follower"]
+        following = request_body["following"]
+        res = database_manager.followUser(follower, following)
+        return jsonify(res), 200
+
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
+
 @app.route('/profile')
 def getProfile():
     try:
@@ -88,7 +102,7 @@ def getPapers():
     try:
         r_id = request.args.get('r_id')
         query = database_manager.getPapers(r_id)
-        if query == ():
+        if query == () or query[0][0] is None:
             return jsonify({"papers": []})
         res = {
             "papers": [{
@@ -163,7 +177,9 @@ def getSearch():
                 "paper_url": q[3],
                 "r_id": q[4],
                 "first_name": q[5],
-                "last_name": q[6]
+                "last_name": q[6],
+                "conf_id": q[7],
+                "conf_name": q[8]
             } for q in query_paper]
 
         if query_user is None:
@@ -180,5 +196,6 @@ def getSearch():
     except Exception as e:
         print("ERROR: ", e)
         return jsonify({'error': 'Invalid request'}), 400
+
 if __name__ == '__main__':
     app.run(debug=True)

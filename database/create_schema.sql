@@ -42,6 +42,14 @@ CREATE TABLE Paper
     PRIMARY KEY (doi)
 );
 
+CREATE TABLE TrendingPapers
+(
+    doi VARCHAR(100) NOT NULL,
+    trend_score INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (doi) REFERENCES Paper(doi),
+    INDEX idx_TrendingScore_desc (trend_score DESC)
+);
+
 CREATE TABLE Organization
 (
     o_id VARCHAR(100) NOT NULL,

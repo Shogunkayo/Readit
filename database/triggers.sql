@@ -142,3 +142,79 @@ END//
 
 
 DELIMITER ;
+
+-- Triggers for getting trending pages
+DELIMITER //
+CREATE TRIGGER on_paper_publish
+AFTER INSERT ON Publish_Conf
+FOR EACH ROW
+BEGIN
+    INSERT INTO TrendingPapers
+    VALUES (NEW.doi, 10);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER on_paper_cite
+AFTER INSERT ON Citations
+FOR EACH ROW
+BEGIN
+    UPDATE TrendingPapers tp
+    SET trend_score = trend_score + 5
+    WHERE tp.doi = NEW.paper_cited;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER on_paper_read
+BEFORE UPDATE ON Paper
+FOR EACH ROW
+BEGIN
+    IF NEW.no_reads = OLD.no_reads + 1 THEN
+        UPDATE TrendingPapers tp
+        SET trend_score = trend_score + 3
+        WHERE tp.doi = NEW.doi;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER on_author_visit
+BEFORE UPDATE ON Researcher
+FOR EACH ROW
+BEGIN
+    IF NEW.page_visits = OLD.page_visits + 1 THEN
+        UPDATE TrendingPapers tp
+        JOIN WritePaper wp ON tp.doi = wp.doi
+        JOIN Researcher r ON r.r_id = wp.r_id
+        SET tp.trend_score = tp.trend_score + 1
+        WHERE r.r_id = NEW.r_id;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER on_author_follow
+AFTER INSERT ON Follows
+FOR EACH ROW
+BEGIN
+    UPDATE TrendingPapers tp
+    JOIN WritePaper wp ON tp.doi = wp.doi
+    JOIN Researcher r ON r.r_id = wp.r_id
+    SET tp.trend_score = tp.trend_score + 2
+    WHERE r.r_id = NEW.follows;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER on_author_unfollow
+AFTER DELETE ON Follows
+FOR EACH ROW
+BEGIN
+    UPDATE TrendingPapers tp
+    JOIN WritePaper wp ON tp.doi = wp.doi
+    JOIN Researcher r ON r.r_id = wp.r_id
+    SET tp.trend_score = tp.trend_score - 2
+    WHERE r.r_id = Old.follows;
+END //
+DELIMITER ;

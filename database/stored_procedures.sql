@@ -112,6 +112,7 @@ END //
 DELIMITER ;
 
 /* Get information about the papers published by r_id if publicly available */
+DROP PROCEDURE GetPapers;
 DELIMITER //
 CREATE PROCEDURE GetPapers(
     IN p_r_id VARCHAR(100)
@@ -122,7 +123,7 @@ BEGIN
         p.domain AS domain,
         p.paper_url AS paper_url,
         p.title AS p_title,
-        COUNT(*) AS p_citations,
+        COUNT(ci.paper_cited) AS p_citations,
         conf.c_id AS conf_id,
         conf.c_name AS conf_name,
         pc.date_published AS p_date
@@ -151,14 +152,19 @@ BEGIN
         p.paper_url as paper_url,
         r.r_id as r_id,
         r.first_name as first_name,
-        r.last_name as last_name
+        r.last_name as last_name,
+        conf.c_id as conf_id,
+        conf.c_name as conf_name
     FROM Paper p
     JOIN Citations ci ON ci.paper_cited = p.doi
     JOIN WritePaper wp ON wp.doi = p.doi
     JOIN Researcher r ON wp.r_id = r.r_id
+    JOIN Publish_Conf pc ON pc.doi = p.doi
+    JOIN Conference conf ON pc.c_id = conf.c_id
     WHERE p.title LIKE CONCAT('%', p_search_key, '%') 
     OR r.first_name LIKE CONCAT('%', p_search_key, '%')
-    OR r.last_name LIKE CONCAT('%', p_search_key, '%');
+    OR r.last_name LIKE CONCAT('%', p_search_key, '%')
+    OR conf.c_name LIKE CONCAT('%', p_search_key, '%');
 END //
 
 DELIMITER ;
@@ -179,4 +185,16 @@ BEGIN
     OR r.last_name LIKE CONCAT('%', p_search_key, '%');
 END //
 
+DELIMITER ;
+
+/* Procedures for handling trending papers */
+DELIMITER //
+CREATE PROCEDURE TrendDecay()
+BEGIN
+    UPDATE TrendingPapers
+    SET trend_score = trend_score - 2;
+
+    DELETE FROM TrendingPapers
+    WHERE trend_score <= 0;
+END //
 DELIMITER ;

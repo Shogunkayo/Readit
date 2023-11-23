@@ -89,6 +89,11 @@ class DatabaseManager:
             print("Insert operation failed.")
             return 500
 
+    @_sqlCursor
+    def followUser(self, follower, following, cur):
+        cur.execute(f"INSERT INTO FOLLOWS VALUES ('{following}', '{follower}'")
+        return {"msg": "Follow successful"}
+
     def getResearcher(self, rid):
         self.closeConnection()
         self.openConnection()

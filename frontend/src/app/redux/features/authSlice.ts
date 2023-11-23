@@ -10,12 +10,12 @@ export interface AuthState {
 
 export interface User {
     id: string,
-    email : string
+    email : string,
     token: string
 }
 
 const initialState: AuthState = {
-    user: null // user ? JSON.parse(user) : null
+    user: null// user ? JSON.parse(user) : null
 }
 
 export const authSlice = createSlice({
@@ -25,7 +25,7 @@ export const authSlice = createSlice({
         setUser: (state, action) => {state.user = action.payload},
         logout: (state) => {
             state.user = null
-            localStorage.removeItem('user')
+            // localStorage.removeItem('user')
         }
     }
 })

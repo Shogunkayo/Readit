@@ -37,6 +37,7 @@ const Search = () => {
                         {searchResult["papers"] !== null && searchResult["papers"].map((paper, idx) => (
                             <div key={idx}>
                                 <h2>{paper["title"]}</h2>
+                                <h3>{paper["conf_name"]}</h3>
                                 <p>{paper["domain"]}</p>
                                 <h3>{paper["last_name"]}, {paper["first_name"]}</h3>
                             </div>

@@ -35,7 +35,7 @@ const Login = (props: Props) => {
                     return toast("Server error. Please try later", toast_error_config)
                
                 dispatch(setUser({'token': response.data.token, 'uid': response.data.uid, 'email': email}))
-                localStorage.setItem('user', JSON.stringify({"email": email, 'uid': response.data.uid, 'token': response.data.token}))
+                // localStorage.setItem('user', JSON.stringify({"email": email, 'uid': response.data.uid, 'token': response.data.token}))
                 toast("Login successful!", { type: 'success' });
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 router.push(`/profile/${response.data.uid}`)
