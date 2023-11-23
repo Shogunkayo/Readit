@@ -181,9 +181,13 @@ CREATE TABLE Work_Company
 (
     r_id VARCHAR(100) NOT NULL,
     c_id VARCHAR(100) NOT NULL,
+    city_id INT NOT NULL,
+    country_id INT NOT NULL,
     PRIMARY KEY (r_id),
     FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
-    FOREIGN KEY (c_id) REFERENCES Company(c_id)
+    FOREIGN KEY (c_id) REFERENCES Company(c_id),
+    FOREIGN KEY (city_id) REFERENCES City(city_id),
+    FOREIGN KEY (country_id) REFERENCES Country(country_id)
 );
 
 CREATE TABLE Work_University

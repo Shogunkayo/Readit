@@ -42,7 +42,7 @@ const Profile = ({params}: {params: {id: string}}) => {
     const papers = {
         /* get the following details from the papers publised by the r_id: 
          * paper title, no of citations for that paper, paper domain and the 
-         * conference name if it was published */
+         * conference name if it was published in a Publish_Conf*/
     }
     
     const social = {
