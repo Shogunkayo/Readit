@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, ToastOptions, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
 
 type Props = {}
 
@@ -16,6 +17,7 @@ const Signup = (props: Props) => {
     const [password, setPassword] = useState('');
     const [dob, setDob] = useState('');
     const [nationality, setNationality] = useState('India');
+    const router = useRouter()
 
     const toast_error_config: ToastOptions = {
         position: 'top-center',
@@ -48,10 +50,12 @@ const Signup = (props: Props) => {
             dob: dob,
             nationality: nationality
         })
-        .then(response => {
+        .then(async response => {
                 console.log(response)
                 console.log("Signup successful!");
                 toast("Signup successful!", { type: 'success' });
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                router.push("/login")
         })
         .catch(error => {
             console.error("Server error:", error);

@@ -8,6 +8,7 @@ import { ToastContainer, ToastOptions, toast } from "react-toastify";
 import axios from "axios";
 import { setUser } from "../redux/features/authSlice";
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
 
 type Props = {}
 
@@ -15,6 +16,7 @@ const Login = (props: Props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const dispatch = useDispatch()
+    const router = useRouter()
 
     const toast_error_config: ToastOptions = {
         position: 'top-center',
@@ -23,20 +25,21 @@ const Login = (props: Props) => {
         type:'error'
     }
 
-
     const handleLogin = () => {
         if (email === '' || password === '')
             return toast("Please enter both email and password.", toast_error_config)
         
         axios.post("http://localhost:5000/login", JSON.stringify({email, password}), {headers: {'Content-Type': 'application/json'}})
-            .then(response => {
+            .then(async response => {
                 if (!response.data || !response.data.token || !response.data.uid)
                     return toast("Server error. Please try later", toast_error_config)
                
                 dispatch(setUser({'token': response.data.token, 'uid': response.data.uid, 'email': email}))
                 console.log(response)
-                console.log("Signup successful!");
-                toast("Signup successful!", { type: 'success' });
+                console.log("Login successful!");
+                toast("Login successful!", { type: 'success' });
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                router.push('/profile')
             })
             .catch(error => {
                 console.log(error)

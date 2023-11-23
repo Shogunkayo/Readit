@@ -61,5 +61,16 @@ def signup():
 def verifyAuth():
     return jsonify({'message': 'JWT Token is present. Visited Protected Route'})
 
+# -- Profile routes
+@app.route('/profile')
+def getProfile():
+    try:
+        r_id = request.args.get('r_id')
+        print(r_id)
+        return jsonify({'msg': 'Received param'})
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
+
 if __name__ == '__main__':
     app.run(debug=True)
