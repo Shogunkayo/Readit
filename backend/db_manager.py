@@ -7,12 +7,22 @@ class DatabaseManager:
     def __init__(self, sql_host, sql_uname, sql_pw, sql_db):
         self.sql_host = sql_host
         self.sql_uname = sql_uname
+        self.sql_pw = sql_pw
+        self.sql_db_name = sql_db
 
         self.sql_db = MySQLdb.connect(
             host=sql_host,
             user=sql_uname,
             password=sql_pw,
             database=sql_db
+        )
+
+    def openConnection(self):
+        self.sql_db = MySQLdb.connect(
+            host=self.sql_host,
+            user=self.sql_uname,
+            password=self.sql_pw,
+            database=self.sql_db_name
         )
 
     def closeConnection(self):
@@ -78,3 +88,81 @@ class DatabaseManager:
         else:
             print("Insert operation failed.")
             return 500
+
+    def getResearcher(self, rid):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetResearcher", [rid])
+        res = cur.fetchall()
+        cur.close()
+        return res[0]
+
+    def getPapers(self, rid):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetPapers", [rid])
+        res = cur.fetchall()
+        cur.close()
+        return res
+
+    def getSocial(self, rid):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetSocial", [rid])
+        res = cur.fetchall()
+        cur.close()
+        return res
+
+    def getCompany(self, rid):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetCompInfo", [rid])
+        res = cur.fetchall()
+        cur.close()
+        if res == ():
+            return None
+        else:
+            return {
+                "comp_id": res[0][0],
+                "comp_name": res[0][1],
+                "comp_city": res[0][2],
+                "comp_country": res[0][3]
+            }
+
+    def getUniversity(self, rid):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetUniInfo", [rid])
+        res = cur.fetchall()
+        cur.close()
+        if res == ():
+            return None
+        else:
+            return {
+                "uni_id": res[0][0],
+                "uni_name": res[0][1],
+                "uni_city": res[0][2],
+                "uni_country": res[0][3],
+                "dep_name": res[0][4],
+                "dep_id": res[0][5]
+            }
+
+    def getOrganization(self, rid):
+        self.closeConnection()
+        self.openConnection()
+        cur = self.sql_db.cursor()
+        cur.callproc("GetOrgInfo", [rid])
+        res = cur.fetchall()
+        cur.close()
+        if res == ():
+            return None
+        else:
+            return {
+                "org_id": res[0][0],
+                "org_name": res[0][1]
+            }

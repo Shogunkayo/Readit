@@ -66,8 +66,79 @@ def verifyAuth():
 def getProfile():
     try:
         r_id = request.args.get('r_id')
-        print(r_id)
-        return jsonify({'msg': 'Received param'})
+        query = database_manager.getResearcher(r_id)
+        res = {
+            "r_id": query[0],
+            "last_name": query[1],
+            "first_name": query[2],
+            "email": query[3],
+            "h_index": query[4],
+            "no_citations": query[5],
+            "dob": query[6],
+            "page_visits": query[7],
+            "nationality": query[8]
+        }
+        return jsonify(res), 200
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
+
+@app.route('/papers')
+def getPapers():
+    try:
+        r_id = request.args.get('r_id')
+        query = database_manager.getPapers(r_id)
+        if query == ():
+            return jsonify({"papers": []})
+        res = {
+            "papers": [{
+                "doi": q[0],
+                "domain": q[1],
+                "paper_url": q[2],
+                "title": q[3],
+                "p_citations": q[4],
+                "conf_id": q[5],
+                "conf_name": q[6],
+                "published_date": q[7]
+            } for q in query]
+        }
+        return jsonify(res), 200
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
+
+@app.route('/work')
+def getWork():
+    r_id = request.args.get('r_id')
+
+    query_org = database_manager.getOrganization(r_id)
+    query_comp = database_manager.getCompany(r_id)
+    query_uni = database_manager.getUniversity(r_id)
+    res = {
+        "org": query_org,
+        "comp": query_comp,
+        "uni": query_uni
+    }
+    return jsonify(res), 200
+
+@app.route('/social')
+def getSocial():
+    try:
+        r_id = request.args.get('r_id')
+        query = database_manager.getSocial(r_id)
+        res = {
+            "following": [{
+                "r_id": q[1],
+                "last_name": q[2],
+                "first_name": q[3]
+            } for q in query if q[0] == "follows"],
+            "followers": [{
+                "r_id": q[1],
+                "last_name": q[2],
+                "first_name": q[3]
+            } for q in query if q[0] == "follower"]
+        }
+        return jsonify(res), 200
     except Exception as e:
         print("ERROR: ", e)
         return jsonify({'error': 'Invalid request'}), 400

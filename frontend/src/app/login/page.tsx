@@ -39,7 +39,7 @@ const Login = (props: Props) => {
                 console.log("Login successful!");
                 toast("Login successful!", { type: 'success' });
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                router.push('/profile')
+                router.push(`/profile/${response.data.uid}`)
             })
             .catch(error => {
                 console.log(error)

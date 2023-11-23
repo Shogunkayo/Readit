@@ -20,7 +20,7 @@ const Topbar = (props: Props) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 0) {
+            if (window && window.scrollY > 0) {
                 setOpacity(0.4)
             }
             else {
@@ -87,11 +87,6 @@ const Topbar = (props: Props) => {
                     </>
                 )}
             </div>
-            {window.scrollY > 0 && (
-                <div className="fixed z-50 top-[56rem] right-5">
-                    <button className="bg-text text-secondary hover:text-background hover:bg-primary" onClick={() => scrollToDiv("main")}><AiOutlineArrowUp></AiOutlineArrowUp></button>
-                </div>
-            )}
         </nav>
     )
 }

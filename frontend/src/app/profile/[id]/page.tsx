@@ -1,50 +1,109 @@
+'use client'
+
 import axios from "axios"
-import { toast } from "react-toastify"
+import { useEffect, useState } from "react"
+
+interface userProfile {
+    dob: Date,
+    email: string,
+    first_name: string,
+    last_name: string,
+    h_index: number,
+    no_citations: number,
+    page_visits: number,
+    r_id: string,
+    nationality: string
+}
+
+interface paper {
+    conf_id: string,
+    conf_name: string,
+    doi: string,
+    domain: string,
+    p_citations: number,
+    paper_url: string,
+    published_date: Date,
+    title: string
+}
+
+interface userPapers {
+    papers: paper [] | []
+}
+
+interface follow {
+    first_name: string,
+    last_name: string,
+    r_id: string
+}
+
+interface userSocial {
+    following: follow [] | []
+    followers: follow [] | []
+}
+
+interface userCompany {
+    comp_city: string,
+    comp_country: string,
+    comp_id: string,
+    comp_name: string
+}
+
+interface userUniversity {
+    dep_id: string,
+    dep_name: string,
+    uni_city: string,
+    uni_country: string,
+    uni_id: string,
+    uni_name: string
+}
+
+interface userOrganization {
+    org_name: string,
+    org_id: string
+}
+
+interface userWork {
+    comp: null | userCompany,
+    uni: null | userUniversity,
+    org: null | userOrganization
+}
 
 const Profile = ({params}: {params: {id: string}}) => {
-    const res = axios.get(`http://localhost:5000/profile?r_id=${params.id}`)
-        .then(async response => {
-            if(!response.data)
-                console.log("error getting profile")
-            console.log(response.data)
-            return response.data
-        })
+    const [userProfile, setUserProfile] = useState<userProfile>({})
+    const [userSocial, setUserSocial] = useState<userSocial>({"following": [], "followers": []})
+    const [userPapers, setUserPapers] = useState<userPapers>({"papers": []})
+    const [userWork, setUserWork] = useState<userWork>({"comp": null, "uni": null, "org": null})
 
-    const userProfile = {
-        /* retrieve this information */
-        firstName: "Steven",
-        lastName: "Chopra",
-        nationality: "India",
-        reads: 139402,
-        citations: 3423,
-        hIndex: 10,
-        email: "hehe@gmail.com"
-    }
+    useEffect(() => {
+        axios.get(`http://localhost:5000/profile?r_id=${params.id}`)
+            .then(async response => {
+                if(!response.data)
+                    console.log("error getting profile")
+                setUserProfile(response.data)
 
-    const userInfo = {
-        /* get the first name, last name, email, h index, no reads, no papers,
-         * email, nationality and the no citations for a particular r_id */
-    }
+                axios.get(`http://localhost:5000/papers?r_id=${params.id}`)
+                    .then(async response => {
+                        if(!response.data)
+                            console.log("error getting papers")
+                        setUserPapers(response.data)
+                        
+                        axios.get(`http://localhost:5000/social?r_id=${params.id}`)
+                            .then(async response => {
+                                if(!response.data)
+                                    console.log("error getting social")
+                                setUserSocial(response.data)
 
-    const universityInfo = {
-        /* if r_id working in a university, get the uni name, uni country,
-         * and department name */
-    }
+                                axios.get(`http://localhost:5000/work?r_id=${params.id}`)
+                                    .then(async response => {
+                                        if(!response.data)
+                                            console.log("error getting work")
+                                        setUserWork(response.data)
+                                    })
+                            })
+                    })
+            })
+    }, [params.id])
 
-    const companyInfo = {
-        /* if r_id working in a company, get the company name */
-    }
-
-    const orgInfo = {
-        /* if r_id working in an organization, get the organization name */
-    }
-
-    const papers = {
-        /* get the following details from the papers publised by the r_id: 
-         * paper title, no of citations for that paper, paper domain and the 
-         * conference name if it was published in a Publish_Conf*/
-    }
-    
     const social = {
         /* get information about the followers and following for my r_id*/
         "followers": [
@@ -60,7 +119,7 @@ const Profile = ({params}: {params: {id: string}}) => {
     return (
         <div>
             <div className="div-component bg-secondary">
-                <h2>{userProfile.firstName} {userProfile.lastName}</h2>
+                <h2>{userProfile['first_name']} {userProfile['last_name']}</h2>
             </div>
             <nav className="div-component bg-primary">
                 <button>About</button>
