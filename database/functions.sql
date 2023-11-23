@@ -1,7 +1,9 @@
 /* Calculate citations for a paper */
 DELIMITER //
 
-CREATE FUNCTION CalculateCitations (paperDOI UUID) RETURNS INT
+CREATE FUNCTION CalculateCitations (paperDOI VARCHAR(100)) RETURNS INT
+READS SQL DATA
+DETERMINISTIC
 BEGIN
     DECLARE citationCount INT;
 
@@ -17,7 +19,9 @@ DELIMITER ;
 /* Check if researcher belongs to an organization */
 DELIMITER //
 
-CREATE FUNCTION IsResearcherInOrganization (researcherID UUID, organizationID UUID) RETURNS BOOLEAN
+CREATE FUNCTION IsResearcherInOrganization (researcherID VARCHAR(100), organizationID VARCHAR(100)) RETURNS BOOLEAN
+READS SQL DATA
+DETERMINISTIC
 BEGIN
     DECLARE result BOOLEAN;
 
@@ -35,7 +39,9 @@ DELIMITER ;
 /* Check if researcher works in a company */
 DELIMITER //
 
-CREATE FUNCTION IsResearcherInCompany (researcherID UUID, companyID UUID) RETURNS BOOLEAN
+CREATE FUNCTION IsResearcherInCompany (researcherID VARCHAR(100), companyID VARCHAR(100)) RETURNS BOOLEAN
+READS SQL DATA
+DETERMINISTIC
 BEGIN
     DECLARE result BOOLEAN;
 
@@ -53,14 +59,16 @@ DELIMITER ;
 DELIMITER //
 
 /* Check if researcher works in a university */
-CREATE FUNCTION IsResearcherInUniversity (researcherID UUID, universityID UUID) RETURNS BOOLEAN
+CREATE FUNCTION IsResearcherInUniversity (researcherID VARCHAR(100), departmentID VARCHAR(100)) RETURNS BOOLEAN
+READS SQL DATA
+DETERMINISTIC
 BEGIN
     DECLARE result BOOLEAN;
 
     SELECT EXISTS (
         SELECT 1
         FROM Work_University
-        WHERE r_id = researcherID AND u_id = universityID
+        WHERE r_id = researcherID AND d_id = departmentID
     ) INTO result;
 
     RETURN result;
@@ -71,16 +79,31 @@ DELIMITER ;
 /* Calculate average h-index for a university */
 DELIMITER //
 
-CREATE FUNCTION CalculateAverageHIndex (universityID UUID) RETURNS DECIMAL(5, 2)
+CREATE FUNCTION CalculateAverageHIndex(university_id VARCHAR(100)) RETURNS FLOAT
+READS SQL DATA
+DETERMINISTIC
 BEGIN
-    DECLARE avgHIndex DECIMAL(5, 2);
+    DECLARE total_h_index INT;
+    DECLARE total_researchers INT;
+    DECLARE average_h_index FLOAT;
 
-    SELECT AVG(r.h_index) INTO avgHIndex
+    -- Calculate the total h-index and the total number of researchers for the university
+    SELECT SUM(r.h_index), COUNT(*) 
+    INTO total_h_index, total_researchers
     FROM Researcher r
-    JOIN Work_University wu ON r.r_id = wu.r_id
-    WHERE wu.u_id = universityID;
+    JOIN Department d ON r.r_id = d.d_head
+    JOIN University u ON d.u_id = u.u_id
+    WHERE u.u_id = university_id;
 
-    RETURN avgHIndex;
+    -- Avoid division by zero
+    IF total_researchers > 0 THEN
+        -- Calculate the average h-index
+        SET average_h_index = total_h_index / total_researchers;
+    ELSE
+        SET average_h_index = 0;
+    END IF;
+
+    RETURN average_h_index;
 END //
 
 DELIMITER ;
