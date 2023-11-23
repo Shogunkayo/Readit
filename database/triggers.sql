@@ -36,3 +36,81 @@ END //
 
 DELIMITER ;
 
+-- Trigger to check if a user is already working in a company or university
+DELIMITER //
+
+CREATE TRIGGER before_insert_Work_Company
+BEFORE INSERT ON Work_Company
+FOR EACH ROW
+BEGIN
+    DECLARE user_exists_university INT;
+    DECLARE user_exists_company INT;
+
+    -- Check if the user is already working in a university
+    SELECT COUNT(*)
+    INTO user_exists_university
+    FROM Work_University
+    WHERE r_id = NEW.r_id;
+
+    -- Check if the user is already working in a company
+    SELECT COUNT(*)
+    INTO user_exists_company
+    FROM Work_Company
+    WHERE r_id = NEW.r_id;
+
+    IF user_exists_university > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User is already working in a university.';
+    END IF;
+
+    IF user_exists_company > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User is already working in a company.';
+    END IF;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER before_insert_Work_University
+BEFORE INSERT ON Work_University
+FOR EACH ROW
+BEGIN
+    DECLARE user_exists_university INT;
+    DECLARE user_exists_company INT;
+
+    -- Check if the user is already working in a university
+    SELECT COUNT(*)
+    INTO user_exists_university
+    FROM Work_University
+    WHERE r_id = NEW.r_id;
+
+    -- Check if the user is already working in a company
+    SELECT COUNT(*)
+    INTO user_exists_company
+    FROM Work_Company
+    WHERE r_id = NEW.r_id;
+
+    IF user_exists_university > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User is already working in a university.';
+    END IF;
+
+    IF user_exists_company > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User is already working in a company.';
+    END IF;
+END//
+
+DELIMITER ;
+
+
+
+-- Trigger to check if a paper is already published in either a private repo or a public conference
+
+
+
+
+
+-- Trigger to check if an email already exists before inserting

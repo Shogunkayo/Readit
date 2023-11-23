@@ -1,0 +1,15 @@
+functions.sql - done
+stored_procedures.sql - done
+aggregate_queries.sql - done
+join_queries.sql - fuck it
+nested_queries.sql - done
+triggers.sql - 
+
+
+
+
+
+INSERT INTO Researcher (r_id, last_name, first_name, password, email, h_index, no_citations, date_created, page_visits, nationality, dob) VALUES ('3', 'S', 'J', '$2b$12$A.GCY9AXrL.sxN8Dj49YbObHtrEOH5d0UMI7B6AHxlXZlmFNuzAv6', 'j.s@email.com', 10, 100, '2023-11-23 12:00:00', 50, 1, '2023-11-04');
+
+INSERT INTO Work_Company (r_id, c_id) VALUES ('2', '1a7c813f-13b2-4f4d-bb79-6d8dc23f28a1');
+INSERT INTO Work_University (r_id, d_id) VALUES ('2', '1a7c813f-13b2-4f4d-bb79-6d8dc23f28a1');
