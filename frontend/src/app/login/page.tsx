@@ -31,14 +31,14 @@ const Login = (props: Props) => {
         
         axios.post("http://localhost:5000/login", JSON.stringify({email, password}), {headers: {'Content-Type': 'application/json'}})
             .then(async response => {
-                if (!response.data || !response.data.token || !response.data.uid)
+                if (!response.data || !response.data.token || !response.data.r_id)
                     return toast("Server error. Please try later", toast_error_config)
                
-                dispatch(setUser({'token': response.data.token, 'uid': response.data.uid, 'email': email}))
+                dispatch(setUser({'token': response.data.token, 'r_id': response.data.r_id, 'email': email, 'role': response.data.role}))
                 // localStorage.setItem('user', JSON.stringify({"email": email, 'uid': response.data.uid, 'token': response.data.token}))
                 toast("Login successful!", { type: 'success' });
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                router.push(`/profile/${response.data.uid}`)
+                router.push(`/profile/${response.data.r_id}`)
             })
             .catch(error => {
                 console.log(error)

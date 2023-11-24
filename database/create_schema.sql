@@ -27,6 +27,7 @@ CREATE TABLE Researcher
     dob DATE NOT NULL,
     page_visits INT NOT NULL DEFAULT 0,
     nationality INT NOT NULL,
+    role VARCHAR(10) NOT NULL DEFAULT "user",
     PRIMARY KEY (r_id),
     UNIQUE (email),
     FOREIGN KEY (nationality) REFERENCES Country(country_id)

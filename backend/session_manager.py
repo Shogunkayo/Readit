@@ -66,7 +66,7 @@ class SessionManager:
                     @error = error message
                 On Success:
                     @token = JWT token for the user
-                    @uid = user id of the user
+                    @r_id = user id of the user
         '''
         if (db_query := db.getPassword(email))[1] == 200:
             hashed = db_query[0]
@@ -80,8 +80,8 @@ class SessionManager:
                 'expiration': str(datetime.utcnow() + timedelta(days=1))
             }, self._secret_key)
 
-            return jsonify({'token': token, 'uid': hashed[0]})
-
+            resp = {'token': token, 'r_id': hashed[0], 'role':hashed[2]}
+            return jsonify(resp)
         return db_query
 
     def signup(self, request_body, db):

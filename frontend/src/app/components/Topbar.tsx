@@ -85,7 +85,7 @@ const Topbar = (props: Props) => {
                 )}
                 {auth.user && (
                     <>
-                        <button className="button-black" onClick={() => {router.push(`/profile/${auth.user?.id}`)}}>Profile</button>
+                        <button className="button-black" onClick={() => {router.push(`/profile/${auth.user?.r_id}`)}}>Profile</button>
                         <button className="button-black" onClick={() => {router.push("/"); dispatch(logout())}}>Logout</button>
                     </>
                 )}

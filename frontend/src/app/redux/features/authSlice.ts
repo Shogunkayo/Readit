@@ -9,7 +9,7 @@ export interface AuthState {
 }
 
 export interface User {
-    id: string,
+    r_id: string,
     email : string,
     token: string
 }

@@ -87,12 +87,10 @@ const Profile = ({params}: {params: {id: string}}) => {
     }
 
     const handleFollow = () => {
-        console.log(user?.id)
-        return
-        if (user && user.id !== params.id){
+        if (user && user.r_id !== params.id){
             axios.post("http://localhost:5000/profile/follow",
                 JSON.stringify({
-                    "follower": user.id,
+                    "follower": user.r_id,
                     "following": params.id,
                     "token": user.token
                     }),
@@ -140,8 +138,6 @@ const Profile = ({params}: {params: {id: string}}) => {
                             })
                     })
             })
-        console.log(params.id)
-        console.log(user?.id)
     }, [params.id])
 
     return (
@@ -165,8 +161,8 @@ const Profile = ({params}: {params: {id: string}}) => {
                         <h4>{userWork["org"]["org_name"]}</h4>
                     </div>
                 )}
-                {user && params.id === user.id && (<button>Change Details</button>)}
-                {user && params.id !== user.id && (<button onClick={handleFollow}>Follow</button>)}
+                {user && params.id === user.r_id && (<button>Change Details</button>)}
+                {user && params.id !== user.r_id && (<button onClick={handleFollow}>Follow</button>)}
             </div>
             <div>
                 <nav className="div-component bg-primary">

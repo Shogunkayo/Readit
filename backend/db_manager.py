@@ -61,8 +61,9 @@ class DatabaseManager:
 
     @_sqlCursor
     def getPassword(self, email, cur):
-        cur.execute(f"SELECT r_id, password FROM Researcher WHERE email='{email}'")
-        return cur.fetchone(), 200
+        cur.execute(f"SELECT r_id, password, role FROM Researcher WHERE email='{email}'")
+        res = cur.fetchone()
+        return res, 200
 
     @_sqlCursor
     def isEmailPresent(self, email, cur):
@@ -91,7 +92,8 @@ class DatabaseManager:
 
     @_sqlCursor
     def followUser(self, follower, following, cur):
-        cur.execute(f"INSERT INTO FOLLOWS VALUES ('{following}', '{follower}'")
+        print(f"INSERT INTO Follows VALUES ('{following}', '{follower}'")
+        cur.execute(f"INSERT INTO Follows VALUES ('{following}', '{follower}')")
         return {"msg": "Follow successful"}
 
     def getResearcher(self, rid):
