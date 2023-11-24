@@ -76,6 +76,33 @@ def follow():
         print("ERROR: ", e)
         return jsonify({'error': 'Invalid request'}), 400
 
+@app.route('/profile/unfollow', methods=['POST'])
+@session_manager.validateJWT
+def unfollow():
+    try:
+        request_body = request.get_json()
+        follower = request_body["follower"]
+        following = request_body["following"]
+        res = database_manager.unfollowUser(follower, following)
+        return jsonify(res), 200
+
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
+
+
+@app.route('/profile/visit', methods=['POST'])
+@session_manager.validateJWT
+def visit():
+    try:
+        request_body = request.get_json()
+        r_id = request_body['visitorOf']
+        res = database_manager.pageVist(r_id)
+        return jsonify(res), 200
+    except Exception as e:
+        print("ERROR: ", e)
+        return jsonify({'error': 'Invalid request'}), 400
+
 @app.route('/profile')
 def getProfile():
     try:

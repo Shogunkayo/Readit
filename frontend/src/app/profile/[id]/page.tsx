@@ -104,6 +104,24 @@ const Profile = ({params}: {params: {id: string}}) => {
         }
     }
 
+    const handleUnFollow = () => {
+        if (user && user.r_id !== params.id){
+            axios.post("http://localhost:5000/profile/unfollow",
+                JSON.stringify({
+                    "follower": user.r_id,
+                    "following": params.id,
+                    "token": user.token
+                    }),
+                {headers: {
+                    "Content-Type": "application/json"
+                }}
+            )
+            .then(response => {
+                console.log(response.data)
+            })
+        }
+    }
+
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const getMonthYear = (date: Date) => {
@@ -111,34 +129,89 @@ const Profile = ({params}: {params: {id: string}}) => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/profile?r_id=${params.id}`)
-            .then(async response => {
-                if(!response.data)
-                    console.log("error getting profile")
-                setUserProfile(response.data)
+        if (user && user.r_id !== params.id) {
+            axios.post("http://localhost:5000/profile/visit",
+                JSON.stringify({
+                    "visitor": user.r_id,
+                    "visitorOf": params.id,
+                    "token": user.token
+                    }),
+                {headers: {
+                    "Content-Type": "application/json"
+                }}
+            )
+                .then(response => {
+                    console.log(response.data)
 
-                axios.get(`http://localhost:5000/papers?r_id=${params.id}`)
-                    .then(async response => {
-                        if(!response.data)
-                            console.log("error getting papers")
-                        setUserPapers(response.data)
-                        
-                        axios.get(`http://localhost:5000/social?r_id=${params.id}`)
-                            .then(async response => {
-                                if(!response.data)
-                                    console.log("error getting social")
-                                setUserSocial(response.data)
+                    axios.get(`http://localhost:5000/profile?r_id=${params.id}`)
+                        .then(async response => {
+                            if(!response.data)
+                                console.log("error getting profile")
+                            setUserProfile(response.data)
 
-                                axios.get(`http://localhost:5000/work?r_id=${params.id}`)
-                                    .then(async response => {
-                                        if(!response.data)
-                                            console.log("error getting work")
-                                        setUserWork(response.data)
-                                    })
-                            })
-                    })
-            })
-    }, [params.id])
+                            axios.get(`http://localhost:5000/papers?r_id=${params.id}`)
+                                .then(async response => {
+                                    if(!response.data)
+                                        console.log("error getting papers")
+                                    setUserPapers(response.data)
+                                    
+                                    axios.get(`http://localhost:5000/social?r_id=${params.id}`)
+                                        .then(async response => {
+                                            if(!response.data)
+                                                console.log("error getting social")
+                                            setUserSocial(response.data)
+
+                                            axios.get(`http://localhost:5000/work?r_id=${params.id}`)
+                                                .then(async response => {
+                                                    if(!response.data)
+                                                        console.log("error getting work")
+                                                    setUserWork(response.data)
+                                                })
+                                        })
+                                })
+                        })
+                })
+        }
+        else {
+                    axios.get(`http://localhost:5000/profile?r_id=${params.id}`)
+                        .then(async response => {
+                            if(!response.data)
+                                console.log("error getting profile")
+                            setUserProfile(response.data)
+
+                            axios.get(`http://localhost:5000/papers?r_id=${params.id}`)
+                                .then(async response => {
+                                    if(!response.data)
+                                        console.log("error getting papers")
+                                    setUserPapers(response.data)
+                                    
+                                    axios.get(`http://localhost:5000/social?r_id=${params.id}`)
+                                        .then(async response => {
+                                            if(!response.data)
+                                                console.log("error getting social")
+                                            setUserSocial(response.data)
+
+                                            axios.get(`http://localhost:5000/work?r_id=${params.id}`)
+                                                .then(async response => {
+                                                    if(!response.data)
+                                                        console.log("error getting work")
+                                                    setUserWork(response.data)
+                                                })
+                                        })
+                                })
+                        })
+        }
+    }, [user, params.id])
+
+    const doesUserFollow = () => {
+        console.log(userSocial["followers"], user?.r_id)
+        for (let i = 0; i < userSocial["followers"].length; i++) {
+            if (userSocial["followers"][i]["r_id"] === user?.r_id) {
+                return true
+            }
+        }
+        return false
+    }
 
     return (
         <div>
@@ -162,7 +235,8 @@ const Profile = ({params}: {params: {id: string}}) => {
                     </div>
                 )}
                 {user && params.id === user.r_id && (<button>Change Details</button>)}
-                {user && params.id !== user.r_id && (<button onClick={handleFollow}>Follow</button>)}
+                {user && params.id !== user.r_id && !doesUserFollow() && (<button onClick={handleFollow}>Follow</button>)}
+                {user && params.id !== user.r_id && doesUserFollow() && (<button onClick={handleUnFollow}>Unfollow</button>)}
             </div>
             <div>
                 <nav className="div-component bg-primary">

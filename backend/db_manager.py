@@ -92,9 +92,19 @@ class DatabaseManager:
 
     @_sqlCursor
     def followUser(self, follower, following, cur):
-        print(f"INSERT INTO Follows VALUES ('{following}', '{follower}'")
         cur.execute(f"INSERT INTO Follows VALUES ('{following}', '{follower}')")
         return {"msg": "Follow successful"}
+
+    @_sqlCursor
+    def unfollowUser(self, follower, following, cur):
+        print(f"DELETE FROM Follows VALUES follows='{following}' AND follower='{follower}'")
+        cur.execute(f"DELETE FROM Follows WHERE follows='{following}' AND follower='{follower}'")
+        return {"msg": "Unfollow successful"}
+
+    @_sqlCursor
+    def pageVist(self, r_id, cur):
+        cur.execute(f"UPDATE Researcher SET page_visits = page_visits + 1 WHERE r_id = '{r_id}'")
+        return {"msg": "Vist counted"}
 
     def getResearcher(self, rid):
         self.closeConnection()
