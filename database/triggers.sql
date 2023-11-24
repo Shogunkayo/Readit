@@ -218,3 +218,46 @@ BEGIN
     WHERE r.r_id = Old.follows;
 END //
 DELIMITER ;
+
+
+-- Trigger to update h-index of researcher when an entry is made to Citations table
+
+DELIMITER //
+
+CREATE TRIGGER update_h_index_after_citation
+AFTER INSERT ON Citations
+FOR EACH ROW
+BEGIN
+    DECLARE author_id VARCHAR(100);
+
+    -- Get the author(s) of the cited paper
+    SELECT r_id INTO author_id
+    FROM WritePaper
+    WHERE doi = NEW.paper_cited;
+
+    -- Update h-index for each author
+    UPDATE Researcher
+    SET h_index = (
+        SELECT MAX(citations) 
+        FROM (
+            SELECT COUNT(*) as citations
+            FROM Citations
+            JOIN WritePaper ON Citations.paper_citing = WritePaper.doi
+            WHERE WritePaper.r_id = author_id
+            GROUP BY Citations.paper_citing
+        ) AS citation_counts
+        WHERE citations >= (
+            SELECT ROW_NUMBER() OVER (ORDER BY citations DESC) as row_num
+            FROM (
+                SELECT COUNT(*) as citations
+                FROM Citations
+                JOIN WritePaper ON Citations.paper_citing = WritePaper.doi
+                WHERE WritePaper.r_id = author_id
+                GROUP BY Citations.paper_citing
+            ) AS citation_counts_inner
+        )
+    )
+    WHERE r_id = author_id;
+END //
+
+DELIMITER ;
