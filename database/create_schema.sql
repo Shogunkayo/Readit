@@ -12,7 +12,7 @@ CREATE TABLE City (
     city_name VARCHAR(50) NOT NULL,
     country_id INT NOT NULL,
     PRIMARY KEY (city_id),
-    FOREIGN KEY (country_id) REFERENCES Country(country_id)
+    FOREIGN KEY (country_id) REFERENCES Country(country_id) ON DELETE SET NULL
 );
 
 CREATE TABLE Researcher
@@ -30,7 +30,7 @@ CREATE TABLE Researcher
     role VARCHAR(10) NOT NULL DEFAULT "user",
     PRIMARY KEY (r_id),
     UNIQUE (email),
-    FOREIGN KEY (nationality) REFERENCES Country(country_id)
+    FOREIGN KEY (nationality) REFERENCES Country(country_id) ON DELETE SET NULL
 );
 
 CREATE TABLE Paper
@@ -47,7 +47,7 @@ CREATE TABLE TrendingPapers
 (
     doi VARCHAR(100) NOT NULL,
     trend_score INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (doi) REFERENCES Paper(doi),
+    FOREIGN KEY (doi) REFERENCES Paper(doi) ON DELETE CASCADE,
     INDEX idx_TrendingScore_desc (trend_score DESC)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE Priv_Repository
     repo_name VARCHAR(50) NOT NULL,
     admin_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (repo_id),
-    FOREIGN KEY (admin_id) REFERENCES Researcher(r_id)
+    FOREIGN KEY (admin_id) REFERENCES Researcher(r_id) ON DELETE CASCADE
 );
 
 CREATE TABLE University
@@ -77,8 +77,8 @@ CREATE TABLE University
     accredition VARCHAR(50) NOT NULL,
     graduation_rate INT NOT NULL,
     PRIMARY KEY (u_id),
-    FOREIGN KEY (city_id) REFERENCES City(city_id),
-    FOREIGN KEY (country_id) REFERENCES Country(country_id)
+    FOREIGN KEY (city_id) REFERENCES City(city_id) ON DELETE CASCADE,
+    FOREIGN KEY (country_id) REFERENCES Country(country_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Company
@@ -90,7 +90,7 @@ CREATE TABLE Company
     head_city_id INT NOT NULL,
     market_share INT NOT NULL,
     PRIMARY KEY (c_id),
-    FOREIGN KEY (head_city_id) REFERENCES City(city_id)
+    FOREIGN KEY (head_city_id) REFERENCES City(city_id) ON DELETE SET NULL
 );
 
 CREATE TABLE Department
@@ -102,8 +102,8 @@ CREATE TABLE Department
     no_students INT NOT NULL DEFAULT 0,
     u_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (d_id),
-    FOREIGN KEY (u_id) REFERENCES University(u_id),
-    FOREIGN KEY (d_head) REFERENCES Researcher(r_id)
+    FOREIGN KEY (u_id) REFERENCES University(u_id) ON DELETE CASCADE,
+    FOREIGN KEY (d_head) REFERENCES Researcher(r_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Paper_keywords
@@ -111,7 +111,7 @@ CREATE TABLE Paper_keywords
     keyword VARCHAR(50) NOT NULL,
     doi VARCHAR(100) NOT NULL,
     PRIMARY KEY (keyword, doi),
-    FOREIGN KEY (doi) REFERENCES Paper(doi)
+    FOREIGN KEY (doi) REFERENCES Paper(doi) ON DELETE CASCADE
 );
 
 CREATE TABLE University_degrees
@@ -119,7 +119,7 @@ CREATE TABLE University_degrees
     degree VARCHAR(50) NOT NULL,
     u_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (degree, u_id),
-    FOREIGN KEY (u_id) REFERENCES University(u_id)
+    FOREIGN KEY (u_id) REFERENCES University(u_id) ON DELETE CASCADE
 );
 
 CREATE TABLE WritePaper
@@ -127,8 +127,8 @@ CREATE TABLE WritePaper
     r_id VARCHAR(100) NOT NULL,
     doi VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id, doi),
-    FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
-    FOREIGN KEY (doi) REFERENCES Paper(doi)
+    FOREIGN KEY (r_id) REFERENCES Researcher(r_id) ON DELETE CASCADE,
+    FOREIGN KEY (doi) REFERENCES Paper(doi) ON DELETE CASCADE
 );
 
 CREATE TABLE Follows
@@ -136,8 +136,8 @@ CREATE TABLE Follows
     follows VARCHAR(100) NOT NULL,
     follower VARCHAR(100) NOT NULL,
     PRIMARY KEY (follows, follower),
-    FOREIGN KEY (follows) REFERENCES Researcher(r_id),
-    FOREIGN KEY (follower) REFERENCES Researcher(r_id)
+    FOREIGN KEY (follows) REFERENCES Researcher(r_id) ON DELETE CASCADE,
+    FOREIGN KEY (follower) REFERENCES Researcher(r_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Belong_To
@@ -145,8 +145,8 @@ CREATE TABLE Belong_To
     r_id VARCHAR(100) NOT NULL,
     o_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id),
-    FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
-    FOREIGN KEY (o_id) REFERENCES Organization(o_id)
+    FOREIGN KEY (r_id) REFERENCES Researcher(r_id) ON DELETE CASCADE,
+    FOREIGN KEY (o_id) REFERENCES Organization(o_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Citations
@@ -154,8 +154,8 @@ CREATE TABLE Citations
     paper_citing VARCHAR(100) NOT NULL,
     paper_cited VARCHAR(100) NOT NULL,
     PRIMARY KEY (paper_citing, paper_cited),
-    FOREIGN KEY (paper_citing) REFERENCES Paper(doi),
-    FOREIGN KEY (paper_cited) REFERENCES Paper(doi)
+    FOREIGN KEY (paper_citing) REFERENCES Paper(doi) ON DELETE CASCADE,
+    FOREIGN KEY (paper_cited) REFERENCES Paper(doi) ON DELETE CASCADE
 );
 
 CREATE TABLE Publish_Repo
@@ -163,8 +163,8 @@ CREATE TABLE Publish_Repo
     doi VARCHAR(100) NOT NULL,
     repo_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (doi),
-    FOREIGN KEY (doi) REFERENCES Paper(doi),
-    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id)
+    FOREIGN KEY (doi) REFERENCES Paper(doi) ON DELETE CASCADE,
+    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Company_Repo
@@ -172,8 +172,8 @@ CREATE TABLE Company_Repo
     c_id VARCHAR(100) NOT NULL,
     repo_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (repo_id),
-    FOREIGN KEY (c_id) REFERENCES Company(c_id),
-    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id)
+    FOREIGN KEY (c_id) REFERENCES Company(c_id) ON DELETE CASCADE,
+    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id) ON DELETE CASCADE
 );
 
 CREATE TABLE University_Repo
@@ -181,8 +181,8 @@ CREATE TABLE University_Repo
     repo_id VARCHAR(100) NOT NULL,
     u_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (repo_id),
-    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id),
-    FOREIGN KEY (u_id) REFERENCES University(u_id)
+    FOREIGN KEY (repo_id) REFERENCES Priv_Repository(repo_id) ON DELETE CASCADE,
+    FOREIGN KEY (u_id) REFERENCES University(u_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Work_Company
@@ -192,10 +192,10 @@ CREATE TABLE Work_Company
     city_id INT NOT NULL,
     country_id INT NOT NULL,
     PRIMARY KEY (r_id),
-    FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
-    FOREIGN KEY (c_id) REFERENCES Company(c_id),
-    FOREIGN KEY (city_id) REFERENCES City(city_id),
-    FOREIGN KEY (country_id) REFERENCES Country(country_id)
+    FOREIGN KEY (r_id) REFERENCES Researcher(r_id) ON DELETE CASCADE,
+    FOREIGN KEY (c_id) REFERENCES Company(c_id) ON DELETE CASCADE,
+    FOREIGN KEY (city_id) REFERENCES City(city_id) ON DELETE SET NULL,
+    FOREIGN KEY (country_id) REFERENCES Country(country_id) ON DELETE SET NULL
 );
 
 CREATE TABLE Work_University
@@ -203,8 +203,8 @@ CREATE TABLE Work_University
     r_id VARCHAR(100) NOT NULL,
     d_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (r_id),
-    FOREIGN KEY (r_id) REFERENCES Researcher(r_id),
-    FOREIGN KEY (d_id) REFERENCES Department(d_id)
+    FOREIGN KEY (r_id) REFERENCES Researcher(r_id) ON DELETE CASCADE,
+    FOREIGN KEY (d_id) REFERENCES Department(d_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Conference
@@ -217,9 +217,9 @@ CREATE TABLE Conference
     venue_country_id INT NOT NULL,
     o_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (c_id),
-    FOREIGN KEY (o_id) REFERENCES Organization(o_id),
-    FOREIGN KEY (venue_city_id) REFERENCES City(city_id),
-    FOREIGN KEY (venue_country_id) REFERENCES Country(country_id)
+    FOREIGN KEY (o_id) REFERENCES Organization(o_id) ON DELETE CASCADE,
+    FOREIGN KEY (venue_city_id) REFERENCES City(city_id) ON DELETE SET NULL,
+    FOREIGN KEY (venue_country_id) REFERENCES Country(country_id) ON DELETE SET NULL
 );
 
 CREATE TABLE Conference_domains
@@ -227,7 +227,7 @@ CREATE TABLE Conference_domains
     domain VARCHAR(50) NOT NULL,
     c_id VARCHAR(100) NOT NULL,
     PRIMARY KEY (domain, c_id),
-    FOREIGN KEY (c_id) REFERENCES Conference(c_id)
+    FOREIGN KEY (c_id) REFERENCES Conference(c_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Publish_Conf
@@ -237,6 +237,6 @@ CREATE TABLE Publish_Conf
     c_id VARCHAR(100) NOT NULL,
     domain VARCHAR(50) NOT NULL,
     PRIMARY KEY (doi),
-    FOREIGN KEY (doi) REFERENCES Paper(doi),
-    FOREIGN KEY (c_id) REFERENCES Conference(c_id)
+    FOREIGN KEY (doi) REFERENCES Paper(doi) ON DELETE CASCADE,
+    FOREIGN KEY (c_id) REFERENCES Conference(c_id) ON DELETE CASCADE
 );
