@@ -81,7 +81,7 @@ const Profile = ({params}: {params: {id: string}}) => {
     const getTotalCitations = () => {
         let citations = 0
         for (const paper of userPapers["papers"]) {
-            citations += paper['p_citations']
+            citations += paper['p_citations'] - 1
         }
         return citations
     }

@@ -38,7 +38,7 @@ const Login = (props: Props) => {
                 // localStorage.setItem('user', JSON.stringify({"email": email, 'uid': response.data.uid, 'token': response.data.token}))
                 toast("Login successful!", { type: 'success' });
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                router.push(`/profile/${response.data.r_id}`)
+                router.push(`/admin`)
             })
             .catch(error => {
                 console.log(error)
