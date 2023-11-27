@@ -52,6 +52,16 @@ button {
     color: var(--primary);
 }
 
+.button-primary {
+    background: var(--background);
+    color: var(--primary);
+}
+
+.button-primary:hover {
+    background: var(--secondary);
+    color: var(--background);
+}
+
 .button-black:hover {
     background: var(--primary);
     color: var(--background);

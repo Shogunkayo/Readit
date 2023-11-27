@@ -37,6 +37,22 @@ def root():
     '''
     return jsonify({"msg": "Hello There"})
 
+@app.route('/new', methods=['GET'])
+def getNewPubs():
+    query = database_manager.getNewPubs()
+    print(query)
+    res = {
+        "data": [{
+            "doi": q[0],
+            "title": q[1],
+            "c_id": q[2],
+            "published": q[3],
+            "r_id": q[4],
+            "authors": q[5] + " " + q[6],
+        } for q in query]}
+
+    return jsonify(res)
+
 # --- Authentication Routes
 @app.route('/login', methods=['POST'])
 def login():

@@ -52,7 +52,7 @@ const Topbar = (props: Props) => {
     }
 
     return (
-        <nav id="topbar" className={`flex items-center justify-between div-component bg-background p-1 sticky top-0 z-40 shadow-xl transition-all duration-300`} style={{ background: `rgba(255, 255, 255, ${opacity})`, backdropFilter: 'blur(5px)'}}>
+        <nav id="topbar" className={`flex items-center justify-between div-component bg-background p-1 sticky top-0 z-40 shadow-md transition-all duration-300`} style={{ background: `rgba(255, 255, 255, ${opacity})`, backdropFilter: 'blur(5px)'}}>
             <div className="flex">
                 <Link href="/">
                     <h1 className="text-gradient text-3xl font-heading">Readit</h1>

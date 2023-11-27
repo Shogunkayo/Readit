@@ -215,12 +215,12 @@ const Profile = ({params}: {params: {id: string}}) => {
 
     return (
         <div>
-            <div className="div-component bg-secondary">
-                <h2>{userProfile['first_name']} {userProfile['last_name']}</h2>
+            <div className="div-component bg-secondary relative">
+                <h2 className="text-3xl text-primary p-4">{userProfile['first_name']} {userProfile['last_name']}</h2>
                 {userWork["uni"] !== null && (
-                    <div>
-                        <h4>Department of {userWork["uni"]["dep_name"]} | {userWork["uni"]["uni_name"]}</h4>
-                        <p>{userWork["uni"]["uni_city"]}, {userWork["uni"]["uni_country"]}</p>
+                    <div className="p-4">
+                        <h4 className="text-xl">Department of {userWork["uni"]["dep_name"]} | {userWork["uni"]["uni_name"]}</h4>
+                        <p className="text-lg">{userWork["uni"]["uni_city"]}, {userWork["uni"]["uni_country"]}</p>
                     </div>
                 )}
                 {userWork["uni"] === null && userWork["comp"] !== null && (
@@ -234,81 +234,80 @@ const Profile = ({params}: {params: {id: string}}) => {
                         <h4>{userWork["org"]["org_name"]}</h4>
                     </div>
                 )}
-                {user && params.id === user.r_id && (<button>Change Details</button>)}
-                {user && params.id !== user.r_id && !doesUserFollow() && (<button onClick={handleFollow}>Follow</button>)}
-                {user && params.id !== user.r_id && doesUserFollow() && (<button onClick={handleUnFollow}>Unfollow</button>)}
+                {user && params.id === user.r_id && (<button className="button-primary absolute right-5 top-5">Change Details</button>)}
+                {user && params.id !== user.r_id && !doesUserFollow() && (<button onClick={handleFollow} className="button-primary absolute right-5 top-5">Follow</button>)}
+                {user && params.id !== user.r_id && doesUserFollow() && (<button onClick={handleUnFollow} className="button-primary absolute right-5 top-5">Unfollow</button>)}
             </div>
-            <div>
-                <nav className="div-component bg-primary">
-                    <button onClick={() => setView("about")}>About</button>
-                    <button onClick={() => setView("papers")}>Papers</button>
-                </nav>
-                <div className="div-component bg-background">
-                    {view === "about" && (
-                        <div>
-                            <div>
-                                <h2>{userPapers['papers'].length}</h2>
+            <div className="flex min-h-[400px]">
+                <div className="flex-none w-1/2">
+                    <nav className="div-component bg-primary">
+                        <button onClick={() => setView("about")} className="button-primary">About</button>
+                    </nav>
+                    <div className="div-component bg-background h-[320px]">
+                        <div className="flex justify-evenly items-center h-full flex-wrap">
+                            <div className="p-10">
+                                <h2 className="text-3xl">{userPapers['papers'].length}</h2>
                                 <p>Papers</p>
                             </div>
-                            <div>
-                                <h2>{userProfile['h_index']}</h2>
+                            <div className="p-10">
+                                <h2 className="text-3xl">{userProfile['h_index']}</h2>
                                 <p>H-Index</p>
                             </div>
-                            <div>
-                                <h2>{userProfile['page_visits']}</h2>
+                            <div className="p-10">
+                                <h2 className="text-3xl">{userProfile['page_visits']}</h2>
                                 <p>Page Visits</p>
                             </div>
-                            <div>
-                                <h2>{getTotalCitations()}</h2>
+                            <div className="p-10">
+                                <h2 className="text-3xl">{getTotalCitations()}</h2>
                                 <p>Citations</p>
                             </div>
                             {userWork["org"] !== null && (
-                                <div>
-                                    <h2>{userWork["org"]["org_name"]}</h2>
+                                <div className="p-10">
+                                    <h2 className="text-3xl">{userWork["org"]["org_name"]}</h2>
                                     <p>Organization</p>
                                 </div>
                             )}
                         </div>
-                    )}
-                    {view === "papers" && (
+                    </div>
+                </div>
+                <div className="div-component bg-primary flex-auto flex justify-evenly">
+                    <div className="div-component bg-background w-1/2">
+                        <h3 className="text-xl text-primary text-center">Followers</h3>
                         <div>
-                            {userPapers["papers"].map((paper, idx) => (
-                                <div key={idx}>
-                                    <div>
-                                        <h3>{paper['title']}</h3>
-                                    </div>
-                                    <div>
-                                        <p>{paper['conf_name']}</p>
-                                        <p>{getMonthYear(new Date(paper['published_date']))}</p>
-                                        <p>{paper['p_citations']} citations</p>
-                                    </div>
+                            {userSocial["followers"].map((follower, idx) => (
+                                <div key={idx} className="p-2 m-1 bg-secondary rounded-3xl">
+                                    <p className="p-2">{follower['first_name']} {follower['last_name']}</p>
                                 </div>
                             ))}
                         </div>
-                    )}
+                    </div>
+                    <div className="div-component bg-background w-1/2">
+                        <h3 className="text-xl text-primary text-center">Following</h3>
+                        <div>
+                            {userSocial["following"].map((following, idx) => (
+                                <div key={idx} className="p-2 m-1 bg-secondary rounded-3xl">
+                                    <p className="p-2">{following['first_name']} {following['last_name']}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className="div-component bg-secondary">
-                <div>
-                    <h3>Followers</h3>
-                    <div>
-                        {userSocial["followers"].map((follower, idx) => (
-                            <div key={idx}>
-                                <p>{follower['last_name']}, {follower['first_name']}</p>
-                            </div>
-                        ))}
+
+            <div className="div-component bg-background">
+                <h2 className="text-3xl text-center text-primary p-4">Publications</h2>
+                {userPapers["papers"].map((paper, idx) => (
+                    <div key={idx} className="bg-secondary rounded-3xl p-5 m-2">
+                        <div>
+                            <h3 className="text-2xl">{paper['title']}</h3>
+                        </div>
+                        <div className="relative">
+                            <p>{paper['conf_name']}</p>
+                            <p>{getMonthYear(new Date(paper['published_date']))}</p>
+                            <h2 className="absolute right-5 bottom-5 text-2xl text-gradient">{paper['p_citations']} citations</h2>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <h3>Following</h3>
-                    <div>
-                        {userSocial["following"].map((following, idx) => (
-                            <div key={idx}>
-                                <p>{following['last_name']}, {following['first_name']}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     )

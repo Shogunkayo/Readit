@@ -4,37 +4,15 @@ import Table from "./Table"
 
 type Props = {
     title: string,
-    url: string | null
-    color: string
+    url: string | null,
+    color: string,
     height: string
 }
 
+
+
 const Explore = (props: Props) => {
 
-    const newPublicationsColumns = ["Title", "Authors", "Published"];
-
-    const newPublicationsData = [
-      {
-        title: "[publication title]",
-        authors: "[authors]",
-        published: "[journal/conference]",
-      },
-      {
-        title: "[publication title]",
-        authors: "[authors]",
-        published: "[journal/conference]",
-      },
-      {
-        title: "[publication title]",
-        authors: "[authors]",
-        published: "[journal/conference]",
-      },
-      {
-        title: "[publication title]",
-        authors: "[authors]",
-        published: "[journal/conference]",
-      },
-    ];
 
     return (
         <div className={`bg-${props.color} rounded-3xl m-0.5 ${props.height} relative`}>
@@ -50,7 +28,7 @@ const Explore = (props: Props) => {
                 >{props.title}</h3>
                 <button className="button-circle z-10 absolute right-5">&gt;</button>
             </div>
-            {props.title === "New Publications" && <Table data={newPublicationsData} columns={newPublicationsColumns}></Table>}
+            {props.title === "New Publications" && <Table></Table>}
         </div>
     )
 }
